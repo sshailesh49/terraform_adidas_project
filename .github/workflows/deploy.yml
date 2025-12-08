@@ -1,4 +1,4 @@
-name: Deploy Terraform and Lambdas.
+name: Deploy Terraform and Lambdas
 
 on:
   push:
