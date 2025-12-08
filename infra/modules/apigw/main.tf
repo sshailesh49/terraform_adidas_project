@@ -1,3 +1,26 @@
+resource "aws_iam_role" "apigw_cloudwatch_role" {
+  name = "apigw-cloudwatch-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "apigateway.amazonaws.com"
+        }
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "apigw_logs" {
+  role       = aws_iam_role.apigw_cloudwatch_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+}
+
+
 resource "aws_api_gateway_rest_api" "api" {
   name = "${var.project_name}-api"
 }
@@ -60,6 +83,11 @@ resource "aws_api_gateway_deployment" "deployment" {
   aws_api_gateway_integration.shopee_lambda_integration]
   rest_api_id = aws_api_gateway_rest_api.api.id
 }
+
+resource "aws_api_gateway_account" "account" {
+  cloudwatch_role_arn = aws_iam_role.apigw_cloudwatch_role.arn
+}
+
 resource "aws_api_gateway_stage" "prod" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
   deployment_id = aws_api_gateway_deployment.deployment.id
@@ -79,6 +107,10 @@ resource "aws_api_gateway_stage" "prod" {
   }
 
   xray_tracing_enabled = true
+
+  depends_on = [
+    aws_api_gateway_account.account
+  ]
 }
 
 resource "aws_cloudwatch_log_group" "apigw_logs" {
