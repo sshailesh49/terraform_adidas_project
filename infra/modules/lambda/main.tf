@@ -11,8 +11,8 @@ resource "aws_s3_bucket" "lambda_bucket" {
 # ------------------------
 data "archive_file" "adidas_zip" {
   type        = "zip"
-  source_dir  = "${path.root}/../lambdas/adidas-lambda"
-  output_path = "${path.root}/../lambdas/adidas-lambda.zip"
+  source_dir  = "${path.root}/lambdas/adidas-lambda"
+  output_path = "${path.root}/lambdas/adidas-lambda.zip"
 }
 
 
