@@ -30,9 +30,11 @@ resource "aws_s3_object" "adidas_zip_upload" {
 resource "aws_s3_object" "fpdf_layer_upload" {
   bucket = aws_s3_bucket.lambda_bucket.id
   key    = "layers/fpdf-layer.zip"
-  source = "${path.module}/../../../lambdas/fpdf-layer/fpdf-layer.zip"
-  etag   = filemd5("${path.module}/../../../lambdas/fpdf-layer/fpdf-layer.zip")
+
+  source = "${path.root}/../lambdas/fpdf-layer/fpdf-layer.zip"
+  etag   = filemd5("${path.root}/../lambdas/fpdf-layer/fpdf-layer.zip")
 }
+
 
 resource "aws_lambda_layer_version" "fpdf_layer" {
   layer_name          = "fpdf_layer_IsThisReal"
