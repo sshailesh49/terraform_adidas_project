@@ -29,8 +29,8 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "lambda_encryption
 # ------------------------
 data "archive_file" "adidas_zip" {
   type        = "zip"
-  source_dir  = "${path.root}/lambdas/adidas-lambda"
-  output_path = "${path.root}/lambdas/adidas-lambda.zip"
+  source_dir  = "${path.root}/../lambdas/adidas-lambda"
+  output_path = "${path.root}/../lambdas/adidas-lambda.zip"
 }
 
 
