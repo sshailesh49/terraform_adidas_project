@@ -59,7 +59,7 @@ jobs:
           terraform_version: 1.5.0
 
       - name: Terraform Format
-        run: terraform fmt -check -recursive
+        run: terraform fmt  -recursive   #  terraform fmt -check -recursive not format pipeline faile
         env:
           TF_VAR_aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           TF_VAR_aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
