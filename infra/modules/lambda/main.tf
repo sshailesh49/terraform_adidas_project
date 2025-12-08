@@ -36,7 +36,7 @@ data "archive_file" "adidas_zip" {
 
 
 # ------------------------
-# 3 Upload ZIP file to S3
+# 3 Upload ZIP file to S31
 # ------------------------
 resource "aws_s3_object" "adidas_zip_upload" {
   bucket = aws_s3_bucket.lambda_bucket.bucket
