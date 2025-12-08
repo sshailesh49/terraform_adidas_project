@@ -1,0 +1,3 @@
+fpdf
+boto3
+requests

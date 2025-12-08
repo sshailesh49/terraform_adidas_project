@@ -1,0 +1,169 @@
+name: Deploy Terraform and Lambdas
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "infra/**"
+      - "lambdas/**"
+  pull_request:
+    paths:
+      - "infra/**"
+      - "lambdas/**"
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+
+  #########################################################################
+  # 1. TERRAFORM WORKFLOW — runs only when infra/ changes
+  #########################################################################
+  terraform:
+    name: Terraform
+    runs-on: ubuntu-latest
+    if: contains(github.event.head_commit.message, 'infra') 
+        || github.event_name == 'pull_request'
+        || github.event_name == 'push'
+        && github.ref == 'refs/heads/main'
+        && !cancelled()
+
+    defaults:
+      run:
+        working-directory: ./infra
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Cache Terraform plugins & modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.terraform.d/plugin-cache
+            ./infra/.terraform
+          key: terraform-${{ runner.os }}-${{ hashFiles('infra/**/*.tf') }}
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.0
+
+      - name: Terraform Format
+        run: terraform fmt -check -recursive
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Security Scan (tfsec)
+        uses: aquasecurity/tfsec-action@v1.0.3
+
+      - name: Terraform Plan
+        run: terraform plan -input=false -out=tfplan
+
+      - name: Upload Plan Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform-plan
+          path: ./infra/tfplan
+
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: terraform apply -input=false -auto-approve tfplan
+
+
+  #########################################################################
+  # 2. PYTHON LINT + TESTS — runs only when lambdas/ changes
+  #########################################################################
+  python-checks:
+    name: Python Quality Checks
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
+
+    defaults:
+      run:
+        working-directory: ./lambdas
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install tools
+        run: |
+          pip install --upgrade pip
+          pip install black isort flake8 pytest boto3
+
+      - name: Run Black (Auto-format)
+        run: black .
+
+      - name: Run isort (Import sorting)
+        run: isort .
+
+      - name: Lint with flake8
+        run: |
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+      - name: Run pytest
+        run: pytest -q
+
+
+  #########################################################################
+  # 3. DEPLOY LAMBDAS — runs only on main branch & only if lambdas changed
+  #########################################################################
+  deploy-lambdas:
+    name: Deploy Lambda Functions
+    needs: [python-checks, terraform]
+    if: github.ref == 'refs/heads/main' 
+        && github.event_name == 'push'
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - function_name: AdidasLambda
+            source_dir: adidas-lambda
+          - function_name: ShopeeLambda
+            source_dir: shopee-lambda
+          - function_name: FarEyeLambda
+            source_dir: fareye-lambda
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Package Lambda Source
+        working-directory: ./lambdas/${{ matrix.source_dir }}
+        run: |
+          zip -r function.zip .
+
+      - name: Deploy Lambda Code to AWS
+        working-directory: ./lambdas/${{ matrix.source_dir }}
+        run: |
+          aws lambda update-function-code \
+            --function-name ${{ matrix.function_name }} \
+            --zip-file fileb://function.zip

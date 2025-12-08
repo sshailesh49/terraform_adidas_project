@@ -1,0 +1,31 @@
+{
+  "order_id": "12345dddd",
+  "s3_raw": "raw/12345.json",
+  "s3_pdf": "pdf/12345.pdf",
+  "source": "adidas",
+  "payload": {
+    "order_id": "12345",
+    "customer_name": "John Doe",
+    "items": [
+      {
+        "sku": "AD123",
+        "quantity": "2",
+        "price": "50"
+      }
+    ],
+    "total": "100"
+  }
+}
+
+
+###   create table  in redshift 
+
+CREATE TABLE orders (
+    order_id VARCHAR(50) NOT NULL,
+    s3_raw VARCHAR(255),
+    s3_pdf VARCHAR(255),
+    source VARCHAR(50),
+    payload SUPER,        -- nested JSON storage
+    created_at TIMESTAMP DEFAULT GETDATE(),
+    PRIMARY KEY(order_id)
+);
