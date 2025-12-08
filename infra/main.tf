@@ -45,7 +45,7 @@ module "lambda" {
   redshift_secret_arn     = module.secrets.redshift_secret_arn
   redshift_db             = module.redshift.database_name
 
-  # Merge base ENV + auto values  -  
+  # Merge base ENV + auto values  -  -
 
 
   #env                  = var.env
