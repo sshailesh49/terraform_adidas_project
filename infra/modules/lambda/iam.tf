@@ -73,7 +73,9 @@ resource "aws_iam_role_policy" "fareye_policy" {
           "sqs:ReceiveMessage",
           "sqs:DeleteMessage",
           "sqs:GetQueueAttributes",
-          "sqs:SendMessage"
+          "sqs:SendMessage",
+          "kms:Decrypt",
+				  "kms:DescribeKey"
         ],
         Resource = "*"
       }
