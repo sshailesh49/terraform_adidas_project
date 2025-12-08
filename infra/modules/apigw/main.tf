@@ -84,6 +84,10 @@ resource "aws_api_gateway_stage" "prod" {
 resource "aws_cloudwatch_log_group" "apigw_logs" {
   name              = "/aws/api-gateway/${var.project_name}-api"
   retention_in_days = 14
+  lifecycle {
+    prevent_destroy = true
+    ignore_changes  = [name]
+  }
 }
 
 resource "aws_lambda_permission" "apigw_adidas" {
