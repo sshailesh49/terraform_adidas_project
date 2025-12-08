@@ -34,7 +34,7 @@ resource "aws_iam_role_policy" "lambda_policy" {
 				"sqs:DeleteMessage",
 				"sqs:GetQueueAttributes"
 			],
-			"Resource": "arn:aws:sqs:ap-south-1:750784683061:adidas-fareye-main-queue"
+			"Resource": "*"
 		},
 		{
 			"Effect": "Allow",
@@ -42,18 +42,12 @@ resource "aws_iam_role_policy" "lambda_policy" {
 				"s3:PutObject",
 				"s3:GetObject"
 			],
-			"Resource": [
-				"arn:aws:s3:::adidas-fareye-raw-be4c/*",
-				"arn:aws:s3:::adidas-fareye-pdf-be4c/*"
-			]
+			"Resource": "*"
 		},
 		{
 			"Effect": "Allow",
 			"Action": "s3:ListBucket",
-			"Resource": [
-				"arn:aws:s3:::adidas-fareye-raw-be4c",
-				"arn:aws:s3:::adidas-fareye-pdf-be4c"
-			]
+			"Resource": "*"
 		},
 		{
 			"Effect": "Allow",
