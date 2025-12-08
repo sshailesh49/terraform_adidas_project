@@ -70,7 +70,7 @@ resource "aws_iam_role_policy" "lambda_policy" {
 
 
 # --------------------------------------------------------------------------------
-# Fareye Lambda Role & Permissions
+# Fareye Lambda Role & Permissions   
 # --------------------------------------------------------------------------------
 
 resource "aws_iam_role" "fareye_exec" {
