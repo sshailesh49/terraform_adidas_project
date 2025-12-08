@@ -85,5 +85,5 @@ module "redshift" {
   redshift_master_password = var.redshift_master_password
 
   # If you want the module to read secret from SecretsManager
-  #secret_name  = module.secrets.redshift_secret_name   
+  #secret_name  = module.secrets.redshift_secret_name1
 }
