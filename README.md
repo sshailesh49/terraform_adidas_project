@@ -1,5 +1,7 @@
 # Terraform Adidas Project
 
+![Architecture Diagram](architecture-diagram.jpg)
+
 This project manages AWS infrastructure using Terraform and deploys Python Lambda functions for data processing. It includes a complete CI/CD pipeline using GitHub Actions.
 
 ## Repository
