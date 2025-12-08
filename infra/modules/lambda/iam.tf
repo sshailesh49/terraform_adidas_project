@@ -24,25 +24,56 @@ resource "aws_iam_role_policy" "lambda_policy" {
   name = "${var.project_name}-lambda-inline"
   role = aws_iam_role.lambda_exec.id
   policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Action = [
-          "sqs:SendMessage",
-          "sqs:ReceiveMessage",
-          "sqs:DeleteMessage",
-          "sqs:GetQueueAttributes",
-          "s3:PutObject",
-          "s3:GetObject",
-          "secretsmanager:GetSecretValue",
-          "redshift-data:ExecuteStatement"
-        ],
-        Effect   = "Allow",
-        Resource = var.main_queue_arn
-      }
-    ]
-  })
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Effect": "Allow",
+			"Action": [
+				"sqs:SendMessage",
+				"sqs:ReceiveMessage",
+				"sqs:DeleteMessage",
+				"sqs:GetQueueAttributes"
+			],
+			"Resource": "arn:aws:sqs:ap-south-1:750784683061:adidas-fareye-main-queue"
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				"s3:PutObject",
+				"s3:GetObject"
+			],
+			"Resource": [
+				"arn:aws:s3:::adidas-fareye-raw-be4c/*",
+				"arn:aws:s3:::adidas-fareye-pdf-be4c/*"
+			]
+		},
+		{
+			"Effect": "Allow",
+			"Action": "s3:ListBucket",
+			"Resource": [
+				"arn:aws:s3:::adidas-fareye-raw-be4c",
+				"arn:aws:s3:::adidas-fareye-pdf-be4c"
+			]
+		},
+		{
+			"Effect": "Allow",
+			"Action": "secretsmanager:GetSecretValue",
+			"Resource": "*"
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				"redshift-data:ExecuteStatement",
+				"redshift-data:GetStatementResult",
+				"redshift-data:DescribeStatement"
+			],
+			"Resource": "*"
+		}
+	]
+})
 }
+
+
 
 # --------------------------------------------------------------------------------
 # Fareye Lambda Role & Permissions
