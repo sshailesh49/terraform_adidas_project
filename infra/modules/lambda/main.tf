@@ -27,12 +27,20 @@ resource "aws_s3_object" "adidas_zip_upload" {
   etag   = filemd5(data.archive_file.adidas_zip.output_path)
 }
 
+# ------------------------
+# FPDF Layer Zip
+# ------------------------
+data "archive_file" "fpdf_layer_zip" {
+  type        = "zip"
+  source_dir  = "${path.root}/../lambdas/fpdf-layer"
+  output_path = "${path.root}/../lambdas/fpdf-layer.zip"
+}
+
 resource "aws_s3_object" "fpdf_layer_upload" {
   bucket = aws_s3_bucket.lambda_bucket.id
   key    = "layers/fpdf-layer.zip"
-
-  source = "${path.root}/lambdas/fpdf-layer/fpdf-layer.zip"
-  etag   = filemd5("${path.root}/lambdas/fpdf-layer/fpdf-layer.zip")
+  source = data.archive_file.fpdf_layer_zip.output_path
+  etag   = filemd5(data.archive_file.fpdf_layer_zip.output_path)
 }
 
 
