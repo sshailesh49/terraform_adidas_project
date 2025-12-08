@@ -4,7 +4,7 @@ resource "aws_kms_key" "sm_key" {
 }
 
 resource "aws_secretsmanager_secret" "redshift_credentials" {
-  name       = "${var.project_name}-redshift-credentials-v2"
+  name       = "${var.project_name}-redshift-credentials-v2-${random_id.suff.hex}"
   kms_key_id = aws_kms_key.sm_key.arn
 }
 
@@ -23,7 +23,9 @@ resource "aws_secretsmanager_secret_version" "redshift_credentials_version" {
   })
 }
 
-
+resource "random_id" "suff" {
+  byte_length = 2
+}
 
 #resource "random_password" "redshift" { length = 16 }
 
