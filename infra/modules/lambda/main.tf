@@ -6,6 +6,24 @@ resource "aws_s3_bucket" "lambda_bucket" {
   force_destroy = true
 }
 
+resource "aws_s3_bucket_public_access_block" "lambda_pab" {
+  bucket                  = aws_s3_bucket.lambda_bucket.id
+  block_public_acls       = true
+  ignore_public_acls      = true
+  block_public_policy     = true
+  restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "lambda_encryption" {
+  bucket = aws_s3_bucket.lambda_bucket.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+  }
+}
+
 # ------------------------
 # 2. Create ZIP file of Lambda from ./lambda
 # ------------------------
@@ -68,6 +86,9 @@ resource "aws_lambda_function" "adidas" {
       SQS_URL    = var.sqs_url
     }
   }
+  tracing_config {
+    mode = "Active"
+  }
   layers = [aws_lambda_layer_version.fpdf_layer.arn]
 }
 
@@ -101,6 +122,9 @@ resource "aws_lambda_function" "shopee" {
   handler       = "handler.lambda_handler"
   runtime       = "python3.11"
   role          = aws_iam_role.lambda_exec.arn
+  tracing_config {
+    mode = "Active"
+  }
   environment {
     variables = {
       RAW_BUCKET = var.raw_bucket_id
@@ -138,6 +162,9 @@ resource "aws_lambda_function" "fareye" {
   handler       = "handler.lambda_handler"
   runtime       = "python3.11"
   role          = aws_iam_role.fareye_exec.arn
+  tracing_config {
+    mode = "Active"
+  }
   environment {
     variables = {
       REDSHIFT_WORKGROUP  = var.redshift_workgroup_name

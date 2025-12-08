@@ -1,6 +1,13 @@
-resource "aws_secretsmanager_secret" "redshift_credentials" {
-  name = "${var.project_name}-redshift-credentials-v2"
+resource "aws_kms_key" "sm_key" {
+  description         = "KMS key for Secrets Manager"
+  enable_key_rotation = true
 }
+
+resource "aws_secretsmanager_secret" "redshift_credentials" {
+  name       = "${var.project_name}-redshift-credentials-v2"
+  kms_key_id = aws_kms_key.sm_key.arn
+}
+
 
 
 

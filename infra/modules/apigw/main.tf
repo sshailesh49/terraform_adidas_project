@@ -64,6 +64,26 @@ resource "aws_api_gateway_stage" "prod" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
   deployment_id = aws_api_gateway_deployment.deployment.id
   stage_name    = "prod"
+
+  access_log_settings {
+    destination_arn = aws_cloudwatch_log_group.apigw_logs.arn
+    format = jsonencode({
+      requestId    = "$context.requestId"
+      ip           = "$context.identity.sourceIp"
+      requestTime  = "$context.requestTime"
+      httpMethod   = "$context.httpMethod"
+      resourcePath = "$context.resourcePath"
+      status       = "$context.status"
+      protocol     = "$context.protocol"
+    })
+  }
+
+  xray_tracing_enabled = true
+}
+
+resource "aws_cloudwatch_log_group" "apigw_logs" {
+  name              = "/aws/api-gateway/${var.project_name}-api"
+  retention_in_days = 14
 }
 
 resource "aws_lambda_permission" "apigw_adidas" {
