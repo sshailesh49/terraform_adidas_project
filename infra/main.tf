@@ -45,7 +45,7 @@ module "lambda" {
   main_queue_arn = module.sqs.queue_arn
 
 
-  # NEW: Redshift inputs
+  # NEW: Redshift inputs   
   # NEW: Redshift inputs
   redshift_workgroup_name = module.redshift.workgroup_name
   redshift_secret_arn     = module.secrets.redshift_secret_arn
