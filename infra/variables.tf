@@ -37,7 +37,10 @@ variable "vpc_enabled" {
   default = false
 }
 
-
+variable "lambda_layer_s3_key_fpdf" {
+  type    = string
+  default = "fpdf-layer.zip"
+}
 
 variable "redshift_master_username" {
   description = "Username for Redshift master user"
