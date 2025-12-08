@@ -25,9 +25,9 @@ module "lambda" {
   project_name = var.project_name
 
 
-  lambda_s3_key_adidas = var.lambda_s3_key_adidas
-  lambda_s3_key_shopee = var.lambda_s3_key_shopee
-  lambda_s3_key_fareye = var.lambda_s3_key_fareye
+  lambda_s3_key_adidas     = var.lambda_s3_key_adidas
+  lambda_s3_key_shopee     = var.lambda_s3_key_shopee
+  lambda_s3_key_fareye     = var.lambda_s3_key_fareye
   lambda_layer_s3_key_fpdf = var.lambda_layer_s3_key_fpdf
 
 
