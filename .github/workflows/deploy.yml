@@ -103,8 +103,8 @@ jobs:
       #     TF_VAR_aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Terraform destroy
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: terraform destroy -input=false -auto-approve tfplan
+        #if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: terraform destroy  -auto-approve tfplan
         env:
           TF_VAR_aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           TF_VAR_aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
