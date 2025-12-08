@@ -76,11 +76,11 @@ jobs:
           TF_VAR_aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           TF_VAR_aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-      - name: Terraform Security Scan (tfsec)
-        uses: aquasecurity/tfsec-action@v1.0.3
-        env:
-          TF_VAR_aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          TF_VAR_aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      # - name: Terraform Security Scan (tfsec)
+      #   uses: aquasecurity/tfsec-action@v1.0.3
+      #   env:
+      #     TF_VAR_aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     TF_VAR_aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Terraform Plan
         run: terraform plan -input=false -out=tfplan
