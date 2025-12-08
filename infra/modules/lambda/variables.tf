@@ -16,7 +16,7 @@ variable "lambda_s3_key_shopee" { type = string }
 
 variable "lambda_s3_key_fareye" { type = string }
 
-variable "lambda_layer_s3_key_fpdf" {type = string}
+variable "lambda_layer_s3_key_fpdf" { type = string }
 
 
 

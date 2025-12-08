@@ -1,5 +1,5 @@
 # ------------------------
-# 1) Create S3 bucket
+# 1 Create S3 bucket
 # ------------------------
 resource "aws_s3_bucket" "lambda_bucket" {
   bucket        = "${var.project_name}-lambda-bucket"
@@ -7,7 +7,7 @@ resource "aws_s3_bucket" "lambda_bucket" {
 }
 
 # ------------------------
-# 2) Create ZIP file of Lambda from ./lambda
+# 2. Create ZIP file of Lambda from ./lambda
 # ------------------------
 data "archive_file" "adidas_zip" {
   type        = "zip"
@@ -18,7 +18,7 @@ data "archive_file" "adidas_zip" {
 
 
 # ------------------------
-# 3) Upload ZIP file to S3
+# 3 Upload ZIP file to S3
 # ------------------------
 resource "aws_s3_object" "adidas_zip_upload" {
   bucket = aws_s3_bucket.lambda_bucket.bucket
@@ -28,7 +28,7 @@ resource "aws_s3_object" "adidas_zip_upload" {
 }
 
 # ------------------------
-# 4) FPDF Layer
+# 4 FPDF Layer
 # ------------------------
 resource "aws_s3_object" "fpdf_layer_upload" {
   bucket = aws_s3_bucket.lambda_bucket.bucket
@@ -38,9 +38,9 @@ resource "aws_s3_object" "fpdf_layer_upload" {
 }
 
 resource "aws_lambda_layer_version" "fpdf_layer" {
-  layer_name = "fpdf_layer_IsThisReal"
-  s3_bucket  = aws_s3_bucket.lambda_bucket.bucket
-  s3_key     = var.lambda_layer_s3_key_fpdf
+  layer_name          = "fpdf_layer_IsThisReal"
+  s3_bucket           = aws_s3_bucket.lambda_bucket.bucket
+  s3_key              = var.lambda_layer_s3_key_fpdf
   compatible_runtimes = ["python3.11"]
 }
 
@@ -56,17 +56,17 @@ resource "aws_lambda_function" "adidas" {
   role      = aws_iam_role.lambda_exec.arn
   environment {
     variables = {
-      RAW_BUCKET  = var.raw_bucket_id
+      RAW_BUCKET = var.raw_bucket_id
       PDF_BUCKET = var.pdf_bucket_id
       SQS_URL    = var.sqs_url
     }
   }
-   layers = [aws_lambda_layer_version.fpdf_layer.arn]
+  layers = [aws_lambda_layer_version.fpdf_layer.arn]
 }
 
 
 # ------------------------
-# 2) Create ZIP file of Lambda from ./lambda
+# 2 Create ZIP file of Lambda from ./lambda
 # ------------------------
 data "archive_file" "shopee_zip" {
   type        = "zip"
@@ -77,7 +77,7 @@ data "archive_file" "shopee_zip" {
 
 
 # ------------------------
-# 3) Upload ZIP file to S3
+# 3 Upload ZIP file to S3
 # ------------------------
 resource "aws_s3_object" "shopee_zip_upload" {
   bucket = aws_s3_bucket.lambda_bucket.bucket
@@ -96,7 +96,7 @@ resource "aws_lambda_function" "shopee" {
   role          = aws_iam_role.lambda_exec.arn
   environment {
     variables = {
-      RAW_BUCKET  = var.raw_bucket_id
+      RAW_BUCKET = var.raw_bucket_id
       PDF_BUCKET = var.pdf_bucket_id
       SQS_URL    = var.sqs_url
     }
@@ -104,7 +104,7 @@ resource "aws_lambda_function" "shopee" {
 }
 
 # ------------------------
-# 2) Create ZIP file of Lambda from ./lambda
+# 2 Create ZIP file of Lambda from ./lambda
 # ------------------------
 data "archive_file" "fareye_zip" {
   type        = "zip"
@@ -115,7 +115,7 @@ data "archive_file" "fareye_zip" {
 
 
 # ------------------------
-# 3) Upload ZIP file to S3
+# 3 Upload ZIP file to S3
 # ------------------------
 resource "aws_s3_object" "fareye_zip_upload" {
   bucket = aws_s3_bucket.lambda_bucket.bucket
