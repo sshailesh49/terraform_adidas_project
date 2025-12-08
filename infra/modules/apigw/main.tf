@@ -117,7 +117,7 @@ resource "aws_cloudwatch_log_group" "apigw_logs" {
   name              = "/aws/api-gateway/${var.project_name}-api"
   retention_in_days = 14
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
     ignore_changes  = [name]
   }
 }
