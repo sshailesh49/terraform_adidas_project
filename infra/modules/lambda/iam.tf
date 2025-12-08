@@ -38,7 +38,7 @@ resource "aws_iam_role_policy" "lambda_policy" {
           "redshift-data:ExecuteStatement"
         ],
         Effect   = "Allow",
-        Resource = aws_sqs_queue.my_queue.arn
+        Resource = var.main_queue_arn
       }
     ]
   })

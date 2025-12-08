@@ -15,7 +15,8 @@ module "secrets" {
   project_name  = var.project_name
   redshift_host = module.redshift.workgroup_endpoint
   redshift_port = module.redshift.workgroup_port
-  redshift_db   = module.redshift.database_name
+  redshift_db    = module.redshift.database_name
+  main_queue_arn = module.sqs.queue_arn
 }
 
 module "lambda" {
@@ -40,7 +41,9 @@ module "lambda" {
   pdf_bucket_id = module.s3.pdf_bucket
 
 
-  sqs_url = module.sqs.queue_url
+  sqs_url        = module.sqs.queue_url
+  main_queue_arn = module.sqs.queue_arn
+
 
   # NEW: Redshift inputs
   # NEW: Redshift inputs

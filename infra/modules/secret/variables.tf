@@ -18,3 +18,7 @@ variable "redshift_master_password" {
 variable "redshift_host" { type = string }
 variable "redshift_port" { type = string }
 variable "redshift_db" { type = string }
+
+variable "main_queue_arn" {
+  type = string
+}

@@ -43,3 +43,4 @@ variable "redshift_secret_arn" { type = string }
 variable "redshift_db" { type = string }
 
 
+variable "main_queue_arn" { type = string }
