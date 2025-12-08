@@ -31,8 +31,8 @@ resource "aws_s3_object" "fpdf_layer_upload" {
   bucket = aws_s3_bucket.lambda_bucket.id
   key    = "layers/fpdf-layer.zip"
 
-  source = "${path.root}/../lambdas/fpdf-layer/fpdf-layer.zip"
-  etag   = filemd5("${path.root}/../lambdas/fpdf-layer/fpdf-layer.zip")
+  source = "${path.root}/lambdas/fpdf-layer/fpdf-layer.zip"
+  etag   = filemd5("${path.root}/lambdas/fpdf-layer/fpdf-layer.zip")
 }
 
 
