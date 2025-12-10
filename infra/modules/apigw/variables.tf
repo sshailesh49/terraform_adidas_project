@@ -4,6 +4,7 @@ variable "project_name" {
 
 variable "adidas_invoke_arn" {
   type = string
+  default = module.lambda.adidas_invoke_arn
 }
 
 variable "adidas_function_name" {
@@ -12,6 +13,7 @@ variable "adidas_function_name" {
 
 variable "shopee_invoke_arn" {
   type = string
+  default = module.lambda.shopee_invoke_arn
 }
 
 variable "shopee_function_name" {
