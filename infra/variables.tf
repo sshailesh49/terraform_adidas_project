@@ -55,11 +55,6 @@ variable "redshift_master_password" {
   default     = "MustBeStrongP4ssword!" # Change this in production
 }
 
-variable "adidas_invoke_arn" {
-  type = string
-  default = module.lambda.adidas_invoke_arn
-  
-}
 
 
 
