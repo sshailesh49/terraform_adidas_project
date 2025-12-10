@@ -24,7 +24,7 @@ def lambda_handler(event, context):
     }
     sqs.send_message(QueueUrl=QUEUE_URL, MessageBody=json.dumps(message))
 
-    #     # 3. push to SQS 
+    #     # 3. push to SQS dgdfg
     # sqs.send_message(QueueUrl=QUEUE_URL, MessageBody=json.dumps({
     #     "order_id": order_id,
     #     "s3_raw": raw_key,
