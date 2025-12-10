@@ -1,6 +1,6 @@
 # Terraform Adidas Project
 
-![Architecture Diagram](architecture-diagram.jpg)
+
 
 T# Terraform Adidas Final Project
 
