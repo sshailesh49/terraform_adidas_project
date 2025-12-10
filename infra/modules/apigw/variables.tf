@@ -19,3 +19,6 @@ variable "shopee_invoke_arn" {
 variable "shopee_function_name" {
   type = string
 }
+variable "adidas_arn" {
+  type = string
+}
