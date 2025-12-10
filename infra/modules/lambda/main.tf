@@ -65,7 +65,8 @@ resource "aws_s3_object" "fpdf_layer_upload" {
 resource "aws_lambda_layer_version" "fpdf_layer" {
   layer_name          = "fpdf_layer_IsThisReal"
   s3_bucket           = aws_s3_bucket.lambda_bucket.bucket
-  s3_key              = var.lambda_layer_s3_key_fpdf
+  #s3_key              = var.lambda_layer_s3_key_fpdf
+  s3_key  = "layers/fpdf-layer.zip"
   compatible_runtimes = ["python3.11"]
 }
 
