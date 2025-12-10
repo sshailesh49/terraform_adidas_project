@@ -7,10 +7,10 @@ terraform {
     }
   }
   backend "s3" {
-               bucket   = "my-tf-bucket-indore"
+               bucket   = "my-eks-terraform-state-5856"
                         key            = "eks/terraform.tfstate"
                         region         = "ap-south-1"
-                        dynamodb_table = "terraform-lock-table"
+                        dynamodb_table = "terraform-lock-table1"
                         encrypt        = true
                                                 }
 }
