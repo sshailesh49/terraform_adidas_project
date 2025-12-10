@@ -45,8 +45,4 @@ variable "redshift_db" { type = string }
 
 variable "main_queue_arn" { type = string }
 
-variable "adidas_invoke_arn" {
-  type = string
-  default = module.lambda.adidas_invoke_arn
-  
-}
+
