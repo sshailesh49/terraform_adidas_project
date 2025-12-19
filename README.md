@@ -112,7 +112,21 @@ terraform {
   }
 }
 ```
+NEW  : 
+ NEW (RECOMMENDED)
+ # Terraform native lockfile (Best)
+        terraform {
+           backend "s3" {
+            bucket       = "terraform-state-5856"
+            key          = "eks/terraform.tfstate"
+            region       = "ap-south-1"
+            encrypt      = true
+            use_lockfile = true
+          }
+        }
 
+
+note :  No DynamoDB table required
 ---
 
 ## 🚀 Deployment Steps
